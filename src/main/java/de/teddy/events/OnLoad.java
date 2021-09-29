@@ -57,7 +57,8 @@ public class OnLoad {
                         })
                         .then();
 
-        return Mono.zip(mono1, mono2).then();
+        return Mono.zip(mono1, mono2)
+                .then();
     }
 
     private static @NotNull Mono<Void> doDeletion(long category){

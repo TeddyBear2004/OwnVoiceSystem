@@ -18,9 +18,7 @@ public class DeleteTalkScheduler implements Runnable {
                                                 .delete(aLong)
                                                 .then(Mono.empty())))
                 .ofType(VoiceChannel.class)
-                .doOnNext(System.out::println)
                 .flatMap(voiceChannel -> voiceChannel.getVoiceStates()
-                        .doOnNext(System.out::println)
                         .hasElements()
                         .filter(aBoolean -> !aBoolean)
                         .flatMap(a -> Mono.zip(

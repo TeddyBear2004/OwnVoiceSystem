@@ -15,9 +15,12 @@ import de.teddy.tables.DefaultChannelConfigurations;
 import de.teddy.tables.DefaultRolePerGuild;
 import de.teddy.tables.PrivateVoiceChannel;
 import de.teddy.tables.PrivateVoiceInitializer;
+import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.channel.ChannelEvent;
 import discord4j.core.event.domain.guild.GuildCreateEvent;
+import discord4j.gateway.intent.Intent;
+import discord4j.gateway.intent.IntentSet;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 import org.jetbrains.annotations.NotNull;
@@ -58,6 +61,7 @@ public class Handler extends Plugin {
                         .flatMap(OnVoiceChannel::onChannelJoinEvent)
                         .then()
                         .subscribe());
+
         disposables.add(
                 DiscordClient
                         .getDiscordClient()
@@ -81,7 +85,7 @@ public class Handler extends Plugin {
                         .subscribe());
 
 
-        /*disposables.add(Schedulers.single().schedulePeriodically(new DeleteTalkScheduler(), 0, 10, TimeUnit.SECONDS));*///fixme
+        disposables.add(Schedulers.single().schedulePeriodically(new DeleteTalkScheduler(), 0, 10, TimeUnit.SECONDS));
 
         DiscordClient.getDiscordClient()
                 .getCommandManager()
@@ -158,9 +162,9 @@ public class Handler extends Plugin {
                                         new LimitCommand(),
                                         commandSegmentBuilder -> {})
 
-                                /*.addSubCommandLevel("stayAlive",
+                                .addSubCommandLevel("stayAlive",
                                         new StayAliveCommand(),
-                                        commandSegmentBuilder -> {})*///fixme code only works with scheduler (scheduler contains errors)
+                                        commandSegmentBuilder -> {})
 
                                 .addSubCommandLevel("setDefaultRole",
                                         new SetDefaultRole(),
@@ -172,6 +176,9 @@ public class Handler extends Plugin {
                                 .addSubCommandLevel("load",
                                         new LoadCommand(),
                                         commandSegmentBuilder -> {})
+                                .addSubCommandLevel("lol",
+                                        (strings, strings1, user, command, messageChannel, gatewayDiscordClient) -> gatewayDiscordClient.getMessageById(Snowflake.of(strings1[0]), Snowflake.of(strings1[1])),
+                                        commandSegmentBuilder -> {})
                                 .build());
 
     }
@@ -179,5 +186,10 @@ public class Handler extends Plugin {
     @Override
     public void onUnload(){
         disposables.forEach(Disposable::dispose);
+    }
+
+    @Override
+    public IntentSet getIntents(){
+        return IntentSet.of(Intent.GUILD_VOICE_STATES);
     }
 }

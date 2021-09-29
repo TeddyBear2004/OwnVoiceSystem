@@ -68,7 +68,7 @@ public class OnVoiceChannel {
                                 Mono<Void> edit = tuple3.getT3().edit(guildMemberEditSpec ->
                                         guildMemberEditSpec.setNewVoiceChannel(voiceChannel1.getId()));
 
-                                return Mono.zip(mono1, edit);
+                                return Mono.zip(mono1, edit, voiceChannel1.join(voiceChannelJoinSpec -> {}));
                             });
 
                 })
@@ -91,7 +91,7 @@ public class OnVoiceChannel {
         if(!PRIVATE_VOICE_CHANNEL.hasOvertime(voiceState.getChannelId().get().asLong()))
             return Mono.empty();
 
-        return voiceState.getChannel()
+        return event.getClient().getChannelById(voiceState.getChannelId().get())
                 .ofType(VoiceChannel.class)
                 .flatMap(voiceChannel ->
                         voiceChannel
