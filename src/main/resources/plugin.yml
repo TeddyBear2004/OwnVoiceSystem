@@ -2,3 +2,6 @@ name: OwnVoiceSystem
 main: de.teddy.Handler
 version: 0.1
 label: OwnVoiceSystem
+
+intents:
+  - GUILD_VOICE_STATES

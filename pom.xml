@@ -16,7 +16,7 @@
         <dependency>
             <groupId>com.wetterquarz</groupId>
             <artifactId>discord-bot-plugin-architecture</artifactId>
-            <version>0.2</version>
+            <version>0.2.1</version>
         </dependency>
     </dependencies>
 </project>
