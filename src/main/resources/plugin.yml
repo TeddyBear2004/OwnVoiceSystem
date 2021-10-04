@@ -5,3 +5,4 @@ label: OwnVoiceSystem
 
 intents:
   - GUILD_VOICE_STATES
+  - GUILDS
