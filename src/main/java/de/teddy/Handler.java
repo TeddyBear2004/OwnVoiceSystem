@@ -8,6 +8,7 @@ import de.teddy.commands.admin.RemovePrivateVoiceSystemCommand;
 import de.teddy.commands.admin.SetDefaultRole;
 import de.teddy.commands.ov.*;
 import de.teddy.events.OnChannelDelete;
+import de.teddy.events.OnJoin;
 import de.teddy.events.OnLoad;
 import de.teddy.events.OnVoiceChannel;
 import de.teddy.scheduler.DeleteTalkScheduler;
@@ -15,10 +16,10 @@ import de.teddy.tables.DefaultChannelConfigurations;
 import de.teddy.tables.DefaultRolePerGuild;
 import de.teddy.tables.PrivateVoiceChannel;
 import de.teddy.tables.PrivateVoiceInitializer;
-import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.channel.ChannelEvent;
 import discord4j.core.event.domain.guild.GuildCreateEvent;
+import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 import org.jetbrains.annotations.NotNull;
@@ -80,6 +81,13 @@ public class Handler extends Plugin {
                         .getEventDispatcher()
                         .on(ChannelEvent.class)
                         .flatMap(OnChannelDelete::onChannelDelete)
+                        .subscribe());
+        disposables.add(
+                DiscordClient
+                        .getDiscordClient()
+                        .getEventDispatcher()
+                        .on(MemberJoinEvent.class)
+                        .flatMap(OnJoin::onMemberJoinEvent)
                         .subscribe());
 
 
