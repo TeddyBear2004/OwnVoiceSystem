@@ -28,7 +28,7 @@ public class OnLoad {
                                 .then(Mono.empty())))
                 .then();
 
-        var mono2 =
+        /*var mono2 =
                 Flux.fromIterable(Handler.PRIVATE_VOICE_INITIALIZER.getByGuild(event.getGuild().getId().asLong()))
                         .flatMap(tuple2 -> {
                             Mono<Channel> categoryMono = gatewayDiscordClient
@@ -55,10 +55,9 @@ public class OnLoad {
                                                     .onErrorResume(tCategory -> doDeletion(tuple2.getT1())))
                                     .doOnError(Throwable::printStackTrace);
                         })
-                        .then();
+                        .then();*/
 
-        return Mono.zip(mono1, mono2)
-                .then();
+        return mono1.then();
     }
 
     private static @NotNull Mono<Void> doDeletion(long category){
