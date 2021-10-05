@@ -68,7 +68,7 @@ public class OnVoiceChannel {
                                 Mono<Void> edit = tuple3.getT3().edit(guildMemberEditSpec ->
                                         guildMemberEditSpec.setNewVoiceChannel(voiceChannel1.getId()));
 
-                                return Mono.zip(mono1, edit, voiceChannel1.join(voiceChannelJoinSpec -> {}));
+                                return Mono.zip(mono1, edit);
                             });
 
                 })
