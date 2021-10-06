@@ -34,7 +34,7 @@ public class CreatePrivateVoiceSystemCommand implements CommandExecutable {
                                                             category.getId().asLong(),
                                                             voiceChannel.getId().asLong(),
                                                             category.getGuildId().asLong()))))
-                    .flatMap(result -> messageChannel.createMessage("Created successfully a private voice channel system."));
+                    .then(messageChannel.createMessage("Created successfully a private voice channel system."));
         }
         return messageChannel.createMessage("Please send this command to a guild.");
     }
