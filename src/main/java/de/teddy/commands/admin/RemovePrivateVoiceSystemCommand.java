@@ -27,7 +27,7 @@ public class RemovePrivateVoiceSystemCommand implements CommandExecutable {
 
                 return member.getBasePermissions()
                         .filter(permissions ->
-                                permissions.contains(Permission.ADMINISTRATOR))
+                                permissions.contains(Permission.MANAGE_GUILD))
                         .flatMap(s ->
                                 other == null ?
                                         messageChannel.createMessage("Does not found any private voice channel system with the given id.") :
