@@ -96,7 +96,7 @@ public class Handler extends Plugin {
         DiscordClient.getDiscordClient()
                 .getCommandManager()
                 .registerCommands(
-                        new CommandBuilder("ov", null)
+                        new CommandBuilder("ov", new OvCommand())
                                 .addSubCommandLevel(
                                         "addAdmin",
                                         new ChangeAdminCommand(true),
@@ -113,7 +113,7 @@ public class Handler extends Plugin {
                                         new RemovePrivateVoiceSystemCommand(),
                                         commandSegmentBuilder -> {})
 
-                                .addSubCommandLevel("invite",
+                                .addSubCommandLevel("add",
                                         new ChangePermissionOfGivenUsers(
                                                 false,
                                                 PermissionSet.of(Permission.VIEW_CHANNEL, Permission.CONNECT),
