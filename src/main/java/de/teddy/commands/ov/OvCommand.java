@@ -76,6 +76,7 @@ public class OvCommand implements CommandExecutable {
                         .addField("!ov save", "Speichert die aktuelle Configuration. Diese wird mit !ov load wieder geladen oder durch das neu erstellen des Talks.", false)
                         .addField("!ov load", "Lädt die mit !ov save gespeicherte Konfiguration.", false)
 
+                        .addField("** **", "** **", false)
                         .addField("*FÜR ADMINS*", "** **", false)
                         .addField("!ov createSystem", "Erstellt ein OV-System auf diesem Server", false)
                         .addField("!ov deleteSystem [ID from the channel or category]", "Löscht das OV-System auf diesem Server", false)
