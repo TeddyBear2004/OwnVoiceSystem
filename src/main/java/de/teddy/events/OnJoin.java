@@ -20,7 +20,7 @@ public class OnJoin {
                                     .setDescription("Thank you for using this Discord bot.")
                                     .setColor(Color.of(0x005eff))
                                     .addField("Commands", "With `!ov` you can display a list of subcommands.", false)
-                                    .addField("Support", "You are welcome to join our support discord to get help: https://discord.gg/j547HBda53", false)
+                                    .addField("Support", "You are welcome to join our support discord to get help: [Click here](https://discord.gg/j547HBda53)", false)
                                     .setFooter("Have fun", null)))
                     .then();
         return Mono.empty();
