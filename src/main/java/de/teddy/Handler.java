@@ -86,7 +86,7 @@ public class Handler extends Plugin {
                 DiscordClient
                         .getDiscordClient()
                         .getEventDispatcher()
-                        .on(MemberJoinEvent.class)
+                        .on(GuildCreateEvent.class)
                         .flatMap(OnJoin::onMemberJoinEvent)
                         .subscribe());
 
