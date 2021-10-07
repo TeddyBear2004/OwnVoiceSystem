@@ -62,7 +62,7 @@ public class OnVoiceChannel {
                                 var mono1 = PRIVATE_VOICE_CHANNEL.put(
                                         voiceChannel1.getId().asLong(),
                                         tuple3.getT3().getId().asLong(),
-                                        System.currentTimeMillis() + 5000,
+                                        System.currentTimeMillis(),
                                         tuple5Mono == null ? "" : tuple5Mono.getT4(),
                                         event.getCurrent().getGuildId().asLong());
                                 Mono<Void> edit = tuple3.getT3().edit(guildMemberEditSpec ->
