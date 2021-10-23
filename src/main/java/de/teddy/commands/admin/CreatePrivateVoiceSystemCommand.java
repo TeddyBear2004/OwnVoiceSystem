@@ -20,7 +20,7 @@ public class CreatePrivateVoiceSystemCommand implements CommandExecutable {
             Member member = (Member)user;
 
             return member.getBasePermissions()
-                    .filter(permissions -> permissions.contains(Permission.MANAGE_GUILD))
+                    .filter(permissions -> permissions.contains(Permission.MANAGE_GUILD) || permissions.contains(Permission.ADMINISTRATOR))
                     .flatMap(s -> member.getGuild())
                     .flatMap(guild ->
                             guild.createCategory(categoryCreateSpec ->

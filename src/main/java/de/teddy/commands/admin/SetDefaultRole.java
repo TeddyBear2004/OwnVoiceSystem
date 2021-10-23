@@ -24,8 +24,7 @@ public class SetDefaultRole implements CommandExecutable {
             Member member = (Member)user;
 
             return member.getBasePermissions()
-                    .filter(permissions ->
-                            permissions.contains(Permission.MANAGE_GUILD))
+                    .filter(permissions -> permissions.contains(Permission.MANAGE_GUILD) || permissions.contains(Permission.ADMINISTRATOR))
                     .flatMap(s -> Flux.fromArray(args)
                             .collect(Collectors.joining()))
                     .map(s -> Pattern.compile("<@&?([0-9]{1,19})>").matcher(s))
