@@ -24,17 +24,17 @@ public class CreatePrivateVoiceSystemCommand implements CommandExecutable {
                     .flatMap(s -> member.getGuild())
                     .flatMap(guild ->
                             guild.createCategory(categoryCreateSpec ->
-                                    categoryCreateSpec.setName("PrivateVoiceChannels"))
+                                            categoryCreateSpec.setName("PrivateVoiceChannels"))
                                     .flatMap(category ->
                                             guild.createVoiceChannel(voiceChannelCreateSpec ->
-                                                    voiceChannelCreateSpec
-                                                            .setParentId(category.getId())
-                                                            .setName("Join to create own!"))
+                                                            voiceChannelCreateSpec
+                                                                    .setParentId(category.getId())
+                                                                    .setName("Join to create own!"))
                                                     .flatMap(voiceChannel -> Handler.PRIVATE_VOICE_INITIALIZER.put(
                                                             category.getId().asLong(),
                                                             voiceChannel.getId().asLong(),
                                                             category.getGuildId().asLong()))))
-                    .then(messageChannel.createMessage("Created successfully a private voice channel system."));
+                    .flatMap(s -> messageChannel.createMessage("Created successfully a private voice channel system."));
         }
         return messageChannel.createMessage("Please send this command to a guild.");
     }

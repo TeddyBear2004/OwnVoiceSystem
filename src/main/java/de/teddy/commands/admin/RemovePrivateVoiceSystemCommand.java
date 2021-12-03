@@ -26,15 +26,17 @@ public class RemovePrivateVoiceSystemCommand implements CommandExecutable {
                 Long other = Handler.PRIVATE_VOICE_INITIALIZER.getOtherChannel(l);
 
                 return member.getBasePermissions()
-                        .filter(permissions -> permissions.contains(Permission.MANAGE_GUILD) || permissions.contains(Permission.ADMINISTRATOR))
+                        .filter(permissions ->
+                                permissions.contains(Permission.MANAGE_GUILD) || permissions.contains(Permission.ADMINISTRATOR))
                         .flatMap(s ->
-                                other == null ?
-                                        messageChannel.createMessage("Does not found any private voice channel system with the given id.") :
-                                        Flux.fromArray(new Long[]{l, other})
-                                                .flatMap(aLong -> gatewayDiscordClient.getChannelById(Snowflake.of(aLong)))
-                                                .flatMap(channel -> Mono.zip(channel.delete(),
-                                                        Handler.PRIVATE_VOICE_INITIALIZER.delete(channel.getId().asLong())))
-                                                .then(messageChannel.createMessage("Deleted successfully the private voice channel system.")));
+                                other == null
+                                        ? messageChannel.createMessage("Does not found any private voice channel system with the given id.")
+                                        : Flux.fromArray(new Long[]{l, other})
+                                        .flatMap(aLong -> gatewayDiscordClient.getChannelById(Snowflake.of(aLong)))
+                                        .flatMap(channel -> Mono.zip(channel.delete(),
+                                                Handler.PRIVATE_VOICE_INITIALIZER.delete(channel.getId().asLong())))
+
+                                        .then(messageChannel.createMessage("Deleted successfully the private voice channel system.")));
             }catch(NumberFormatException e){
                 return messageChannel.createMessage("The given argument is not an integer.");
             }catch(ArrayIndexOutOfBoundsException e){

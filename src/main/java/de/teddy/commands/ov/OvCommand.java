@@ -16,11 +16,11 @@ import reactor.core.publisher.Mono;
 import java.util.function.Consumer;
 
 public class OvCommand implements CommandExecutable {
-    private final static Consumer<EmbedCreateSpec> OV_COMMANDS;
-    private final static Consumer<EmbedCreateSpec> OV_COMMANDS_FOR_ADMINS;
+    private static Consumer<EmbedCreateSpec> OV_COMMANDS = null;
+    private static Consumer<EmbedCreateSpec> OV_COMMANDS_FOR_ADMINS = null;
 
     static{
-        OV_COMMANDS = embedCreateSpec ->
+        /*OV_COMMANDS = embedCreateSpec ->
                 embedCreateSpec.setTitle("Possible commands:")
                         .addField("!ov addAdmin [@User#1234], [@User2#1234]", "Gibt einem Nutzer das Recht, den Talk zu editieren.", false)
                         .addField("!ov removeAdmin [@User#1234], [@User2#1234]", "Entzieht einem Nutzer das Recht, den Talk zu editieren.", false)
@@ -81,15 +81,11 @@ public class OvCommand implements CommandExecutable {
                         .addField("!ov createSystem", "Erstellt ein OV-System auf diesem Server", false)
                         .addField("!ov deleteSystem [ID from the channel or category]", "Löscht das OV-System auf diesem Server", false)
 
-                        .addField("!ov setDefaultRole [@Role]", "The role highest role, everyone have.", false);
+                        .addField("!ov setDefaultRole [@Role]", "The role highest role, everyone have.", false);/**/
     }
 
     @Override
     public Mono<Message> execute(@NotNull String[] strings, String[] strings1, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
-        return ((Member)user).getBasePermissions()
-                .flatMap(permissions ->
-                        permissions.contains(Permission.MANAGE_GUILD)
-                                ? messageChannel.createEmbed(OV_COMMANDS_FOR_ADMINS)
-                                : messageChannel.createEmbed(OV_COMMANDS));
+        return null;
     }
 }

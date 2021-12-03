@@ -2,6 +2,7 @@ package de.teddy;
 
 import com.wetterquarz.DiscordClient;
 import com.wetterquarz.command.CommandBuilder;
+import com.wetterquarz.command.CommandExecutable;
 import com.wetterquarz.plugin.Plugin;
 import de.teddy.commands.admin.CreatePrivateVoiceSystemCommand;
 import de.teddy.commands.admin.RemovePrivateVoiceSystemCommand;
@@ -23,6 +24,7 @@ import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import reactor.core.Disposable;
 import reactor.core.scheduler.Schedulers;
 
@@ -73,6 +75,7 @@ public class Handler extends Plugin {
                         .getDiscordClient()
                         .getEventDispatcher()
                         .on(GuildCreateEvent.class)
+                        .doOnError(Throwable::printStackTrace)
                         .flatMap(OnLoad::onLoadEvent)
                         .subscribe());
         disposables.add(
@@ -183,7 +186,11 @@ public class Handler extends Plugin {
                                         new LoadCommand(),
                                         commandSegmentBuilder -> {})
                                 .build());
+    }
 
+    @Override
+    public @Nullable CommandExecutable getHelpCommand(){
+        return super.getHelpCommand();
     }
 
     @Override
