@@ -1,14 +1,19 @@
 package de.teddy.events;
 
 import de.teddy.Handler;
+import discord4j.common.store.action.read.GetVoiceStatesInChannelAction;
+import discord4j.common.store.action.read.ReadActions;
 import discord4j.common.util.Snowflake;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.channel.VoiceChannel;
+import discord4j.discordjson.json.MemberData;
+import discord4j.discordjson.json.VoiceStateData;
 import discord4j.discordjson.possible.Possible;
 import discord4j.rest.util.PermissionSet;
 import org.jetbrains.annotations.NotNull;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.HashSet;
@@ -92,15 +97,13 @@ public class OnVoiceChannel {
         if(!PRIVATE_VOICE_CHANNEL.hasOvertime(voiceState.getChannelId().get().asLong()))
             return Mono.empty();
 
-        return voiceState.getChannel()
-                .flatMap(voiceChannel ->
-                        voiceChannel
-                                .getVoiceStates()
-                                .collectList()
-                                .flatMap(voiceStates -> voiceStates.size() == 1
-                                        ? Mono.zip(voiceChannel.delete(),
-                                        PRIVATE_VOICE_CHANNEL.delete(voiceChannel.getId().asLong()))
-                                        : Mono.empty()))
+        return Flux.from(event.getClient().getGatewayResources().getStore().execute(ReadActions
+                        .getVoiceStatesInChannel(voiceState.getChannelId().get().asLong(), old.get().getChannelId().get().asLong())))
+                .map(data -> new VoiceState(event.getClient(), data))
+                .hasElements()
+                .filter(b -> !b)
+                .flatMap(s -> Mono.zip(voiceState.getChannel().flatMap(VoiceChannel::delete),
+                        PRIVATE_VOICE_CHANNEL.delete(voiceState.getChannelId().get().asLong())))
                 .onErrorResume(throwable ->
                         PRIVATE_VOICE_CHANNEL.delete(voiceState.getChannelId().get().asLong())
                                 .doOnNext(aVoid -> throwable.printStackTrace())
