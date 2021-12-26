@@ -20,7 +20,6 @@ import de.teddy.tables.PrivateVoiceInitializer;
 import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.event.domain.channel.ChannelEvent;
 import discord4j.core.event.domain.guild.GuildCreateEvent;
-import discord4j.core.event.domain.guild.MemberJoinEvent;
 import discord4j.rest.util.Permission;
 import discord4j.rest.util.PermissionSet;
 import org.jetbrains.annotations.NotNull;
@@ -115,7 +114,6 @@ public class Handler extends Plugin {
                                 .addSubCommandLevel("deleteSystem",
                                         new RemovePrivateVoiceSystemCommand(),
                                         commandSegmentBuilder -> {})
-
                                 .addSubCommandLevel("add",
                                         new ChangePermissionOfGivenUsers(
                                                 false,
@@ -190,7 +188,7 @@ public class Handler extends Plugin {
 
     @Override
     public @Nullable CommandExecutable getHelpCommand(){
-        return super.getHelpCommand();
+        return new OvCommand();
     }
 
     @Override
