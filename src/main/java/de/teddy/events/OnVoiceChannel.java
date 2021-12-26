@@ -92,16 +92,19 @@ public class OnVoiceChannel {
         if(!PRIVATE_VOICE_CHANNEL.hasOvertime(voiceState.getChannelId().get().asLong()))
             return Mono.empty();
 
-        return event.getClient().getChannelById(voiceState.getChannelId().get())
-                .ofType(VoiceChannel.class)
+        return voiceState.getChannel()
                 .flatMap(voiceChannel ->
                         voiceChannel
                                 .getVoiceStates()
-                                .hasElements()
-                                .filter(aBoolean -> !aBoolean)
-                                .flatMap(s -> Mono.zip(voiceChannel.delete(),
-                                        PRIVATE_VOICE_CHANNEL.delete(voiceChannel.getId().asLong()))))
-                .doOnError(throwable -> PRIVATE_VOICE_CHANNEL.delete(voiceState.getChannelId().get().asLong()))
+                                .collectList()
+                                .flatMap(voiceStates -> voiceStates.size() == 1
+                                        ? Mono.zip(voiceChannel.delete(),
+                                        PRIVATE_VOICE_CHANNEL.delete(voiceChannel.getId().asLong()))
+                                        : Mono.empty()))
+                .onErrorResume(throwable ->
+                        PRIVATE_VOICE_CHANNEL.delete(voiceState.getChannelId().get().asLong())
+                                .doOnNext(aVoid -> throwable.printStackTrace())
+                                .then(Mono.empty()))
                 .then();
     }
 }
