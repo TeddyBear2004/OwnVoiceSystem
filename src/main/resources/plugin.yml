@@ -6,3 +6,6 @@ label: OwnVoiceSystem
 intents:
   - GUILD_VOICE_STATES
   - GUILDS
+
+description:
+  Ein System, mit dem eigene Sprachkanäle erstellen werden können.
