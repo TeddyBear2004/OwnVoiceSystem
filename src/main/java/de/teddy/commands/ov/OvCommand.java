@@ -32,7 +32,7 @@ public class OvCommand implements CommandExecutable {
                 .addField("!ov hide", "Verbietet allen Nutzern das sehen des Sprachkanals.", false)
 
                 .addField("!ov unlock", "Erlaubt allen Nutzern das Verbinden mit dem Sprachkanal", false)
-                .addField("!ov lock", "Verbietent allen Nutzern das Verbinden mit dem Sprachkanal", false)
+                .addField("!ov lock", "Verbietet allen Nutzern das Verbinden mit dem Sprachkanal", false)
 
                 .addField("!ov bitrate [8-96]", "Ändert die Bitrate des Sprachkanals.", false)
 
