@@ -4,6 +4,7 @@ import com.wetterquarz.database.DatabaseManager;
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 import reactor.util.function.Tuple3;
 import reactor.util.function.Tuple4;
 import reactor.util.function.Tuples;
@@ -126,13 +127,13 @@ public class PrivateVoiceChannel {
         return list;
     }
 
-    public @NotNull List<Long> getVoiceChannelsWithOvertime(){
-        List<Long> list = new ArrayList<>();
+    public @NotNull List<Tuple2<Long, Long>> getVoiceChannelsWithOvertime(){
+        List<Tuple2<Long, Long>> list = new ArrayList<>();
 
         long l = System.currentTimeMillis();
         this.cache.forEach((aLong, objects) -> {
             if(objects.getT2() < l)
-                list.add(aLong);
+                list.add(Tuples.of(objects.getT1(),objects.getT4()));
         });
         return list;
     }

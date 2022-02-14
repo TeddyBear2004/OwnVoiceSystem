@@ -20,12 +20,12 @@ public class PrivateVoiceInitializer {
         this.cache = new HashMap<>();
 
         this.databaseManager.executeSQL("CREATE TABLE IF NOT EXISTS `privateVoiceInitializer` (" +
-                "`category` BIGINT(19) NULL DEFAULT NULL," +
-                "`guild` BIGINT(19) NULL DEFAULT NULL," +
-                "`channel` BIGINT(19) NULL DEFAULT NULL" +
-                ")" +
-                "COLLATE='utf8mb4_general_ci'" +
-                ";")
+                        "`category` BIGINT(19) NULL DEFAULT NULL," +
+                        "`guild` BIGINT(19) NULL DEFAULT NULL," +
+                        "`channel` BIGINT(19) NULL DEFAULT NULL" +
+                        ")" +
+                        "COLLATE='utf8mb4_general_ci'" +
+                        ";")
                 .then(this.loadAll())
                 .subscribe();
     }
@@ -51,11 +51,20 @@ public class PrivateVoiceInitializer {
         return list;
     }
 
+    public long getGuildByChannel(long channelId){
+        for(Map.Entry<Long, Tuple2<Long, Long>> entry : this.cache.entrySet()){
+            Tuple2<Long, Long> tuple2 = entry.getValue();
+            if(entry.getKey() == channelId || tuple2.getT1() == channelId)
+                return tuple2.getT2();
+        }
+        return 0;
+    }
+
     public @NotNull Mono<Void> put(long category, long channel, long guild){
         this.cache.put(channel, Tuples.of(category, guild));
 
         return this.databaseManager.executeSQL("INSERT INTO privateVoiceInitializer (`category`, `channel`, `guild`) VALUES (?, ?, ?)",
-                statement -> statement.bind(0, category).bind(1, channel).bind(2, guild))
+                        statement -> statement.bind(0, category).bind(1, channel).bind(2, guild))
                 .then();
     }
 
@@ -72,7 +81,7 @@ public class PrivateVoiceInitializer {
         this.cache.remove(l);
 
         return this.databaseManager.executeSQL("DELETE FROM privateVoiceInitializer WHERE channel = ? OR channel = ?",
-                statement -> statement.bind(0, l).bind(1, value))
+                        statement -> statement.bind(0, l).bind(1, value))
                 .then(Mono.just(l));
     }
 }
