@@ -6,6 +6,8 @@ import discord4j.core.event.domain.VoiceStateUpdateEvent;
 import discord4j.core.object.PermissionOverwrite;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.channel.VoiceChannel;
+import discord4j.core.spec.GuildMemberEditSpec;
+import discord4j.discordjson.possible.Possible;
 import discord4j.rest.util.PermissionSet;
 import org.jetbrains.annotations.NotNull;
 import reactor.core.publisher.Mono;
@@ -62,11 +64,15 @@ public class OnVoiceChannel {
                                 var mono1 = PRIVATE_VOICE_CHANNEL.put(
                                         voiceChannel1.getId().asLong(),
                                         tuple3.getT3().getId().asLong(),
-                                        System.currentTimeMillis() + 5000,
+                                        System.currentTimeMillis(),
                                         tuple5Mono == null ? "" : tuple5Mono.getT4(),
                                         event.getCurrent().getGuildId().asLong());
-                                Mono<Void> edit = tuple3.getT3().edit(guildMemberEditSpec ->
-                                        guildMemberEditSpec.setNewVoiceChannel(voiceChannel1.getId()));
+                                Mono<Void> edit = tuple3.getT3().edit(
+                                        GuildMemberEditSpec
+                                                .builder()
+                                                .newVoiceChannel(Possible.of(Optional.of(voiceChannel1.getId())))
+                                                .build())
+                                        .then();
 
                                 return Mono.zip(mono1, edit);
                             });

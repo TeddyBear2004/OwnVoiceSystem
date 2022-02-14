@@ -25,26 +25,26 @@ import java.util.regex.Pattern;
 
 public class LoadCommand implements CommandExecutable {
     @Override
-    public @Nullable Mono<Message> execute(@NotNull String[] strings, String[] strings1, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
-        if(user instanceof Member){
-            return ((Member)user).getVoiceState()
+    public @NotNull Mono<Message> execute(@NotNull String[] strings, String[] strings1, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient) {
+        if (user instanceof Member) {
+            return ((Member) user).getVoiceState()
                     .flatMap(voiceState -> {
                         Optional<Snowflake> channelId = voiceState.getChannelId();
-                        if(channelId.isEmpty())
+                        if (channelId.isEmpty())
                             return Mono.empty();
 
-                        if(!HasPermission.hasPermissionToEdit(channelId.get().asLong(), user.getId().asLong()))
+                        if (!HasPermission.hasPermissionToEdit(channelId.get().asLong(), user.getId().asLong()))
                             return Mono.empty();
 
-                        Tuple5<Integer, Integer, String, String, String> tuple5 = Handler.DEFAULT_CHANNEL_CONFIGURATIONS.get(((Member)user).getGuildId().asLong(), user.getId().asLong());
+                        Tuple5<Integer, Integer, String, String, String> tuple5 = Handler.DEFAULT_CHANNEL_CONFIGURATIONS.get(((Member) user).getGuildId().asLong(), user.getId().asLong());
 
-                        if(tuple5 == null)
+                        if (tuple5 == null)
                             return Mono.empty();
 
                         Matcher matcher = Pattern.compile("(.*?)&(.*?)&(.*?)\\|").matcher(tuple5.getT5());
                         Set<PermissionOverwrite> permissionOverwrites = new HashSet<>();
 
-                        while(matcher.find())
+                        while (matcher.find())
                             permissionOverwrites
                                     .add(PermissionOverwrite.forMember(Snowflake.of(matcher.group(1)),
                                             PermissionSet.of(Long.parseLong(matcher.group(2))),
@@ -52,17 +52,16 @@ public class LoadCommand implements CommandExecutable {
 
                         var voiceChannelMono = voiceState.getChannel()
                                 .flatMap(voiceChannel ->
-                                        voiceChannel.edit(voiceChannelEditSpec ->
-                                                voiceChannelEditSpec
-                                                        .setBitrate(tuple5.getT1() * 1000)
-                                                        .setUserLimit(tuple5.getT2())
-                                                        .setName(tuple5.getT3())
-                                                        .setPermissionOverwrites(permissionOverwrites)));
-
+                                        voiceChannel
+                                                .edit()
+                                                .withBitrate(tuple5.getT1() * 1000)
+                                                .withUserLimit(tuple5.getT2())
+                                                .withPermissionOverwrites(permissionOverwrites)
+                                                .withName(tuple5.getT3()));
                         return Mono.zip(voiceChannelMono,
                                 Handler.PRIVATE_VOICE_CHANNEL.updateAdmins(channelId.get().asLong(), tuple5.getT4()));
                     }).then(messageChannel.createMessage("Channel successfully loaded."));
         }
-        return null;
+        return Mono.empty();
     }
 }

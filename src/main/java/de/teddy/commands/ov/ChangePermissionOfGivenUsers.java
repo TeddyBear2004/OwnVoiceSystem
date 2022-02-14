@@ -79,9 +79,9 @@ public class ChangePermissionOfGivenUsers implements CommandExecutable {
                                                             .add(PermissionOverwrite
                                                                     .forRole(role1.getId(), add, remove));
 
-                                                    return voiceChannel.edit(voiceChannelEditSpec ->
-                                                            voiceChannelEditSpec
-                                                                    .setPermissionOverwrites(permissionOverwrites));
+                                                    return voiceChannel
+                                                            .edit()
+                                                            .withPermissionOverwrites(permissionOverwrites);
                                                 });
                                     }else{
                                         return DiscordClient.getDiscordClient()
@@ -92,9 +92,9 @@ public class ChangePermissionOfGivenUsers implements CommandExecutable {
                                                             .add(PermissionOverwrite
                                                                     .forRole(role1.getId(), add, remove));
 
-                                                    return voiceChannel.edit(voiceChannelEditSpec ->
-                                                            voiceChannelEditSpec
-                                                                    .setPermissionOverwrites(permissionOverwrites));
+                                                    return voiceChannel
+                                                            .edit()
+                                                            .withPermissionOverwrites(permissionOverwrites);
                                                 });
 
                                     }
@@ -134,9 +134,9 @@ public class ChangePermissionOfGivenUsers implements CommandExecutable {
                                                 .add(PermissionOverwrite
                                                         .forRole(Snowflake.of(matcher1.group(1)), add, remove));
 
-                                    return voiceChannel.edit(voiceChannelEditSpec ->
-                                            voiceChannelEditSpec
-                                                    .setPermissionOverwrites(permissionOverwrites));
+                                    return voiceChannel
+                                            .edit()
+                                            .withPermissionOverwrites(permissionOverwrites);
                                 }
                             }).then(messageChannel.createMessage("Updated successfully the permissions.")));
         }

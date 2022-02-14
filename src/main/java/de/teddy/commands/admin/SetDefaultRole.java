@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class SetDefaultRole implements CommandExecutable {
     @Override
-    public Mono<Message> execute(@NotNull String[] strings, String @NotNull [] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
+    public @NotNull Mono<Message> execute(@NotNull String[] strings, String @NotNull [] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
         if(user instanceof Member){
             Member member = (Member)user;
 

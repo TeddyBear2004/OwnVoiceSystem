@@ -14,21 +14,22 @@ import reactor.core.publisher.Mono;
 
 public class RenameCommand implements CommandExecutable {
     @Override
-    public @NotNull Mono<Message> execute(@NotNull String[] strings, String @NotNull [] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
-        if(user instanceof Member){
-            return ((Member)user).getVoiceState()
+    public @NotNull Mono<Message> execute(@NotNull String[] strings, String @NotNull [] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient) {
+        if (user instanceof Member) {
+            return ((Member) user).getVoiceState()
                     .flatMap(voiceState -> voiceState.getChannel()
                             .filter(voiceChannel -> HasPermission.hasPermissionToEdit(voiceChannel.getId().asLong(), user.getId().asLong()))
                             .flatMap(voiceChannel -> {
                                 StringBuilder builder = new StringBuilder();
-                                for(String arg : args)
+                                for (String arg : args)
                                     builder.append(arg)
                                             .append(" ");
 
-                                if(builder.toString().equals(""))
+                                if (builder.toString().equals(""))
                                     return messageChannel.createMessage("The name may not be empty.");
-                                return voiceChannel.edit(voiceChannelEditSpec ->
-                                        voiceChannelEditSpec.setName(builder.toString()))
+                                return voiceChannel
+                                        .edit()
+                                        .withName(builder.toString())
                                         .then(messageChannel.createMessage("Name successfully updated."));
                             }));
         }

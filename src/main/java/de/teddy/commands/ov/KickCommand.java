@@ -10,6 +10,7 @@ import discord4j.core.object.entity.Member;
 import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.entity.channel.MessageChannel;
+import discord4j.discordjson.possible.Possible;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import reactor.core.publisher.Flux;
@@ -64,7 +65,7 @@ public class KickCommand implements CommandExecutable {
                                                                             ? voiceState1.getChannelId().get().asLong()
                                                                             : null)
                                                                     .filter(aLong -> aLong.equals(channelId.get().asLong()))
-                                                                    .then(member.edit(guildMemberEditSpec -> guildMemberEditSpec.setNewVoiceChannel(null))))
+                                                                    .flatMap(aLong -> member.edit().withNewVoiceChannel(Possible.absent())))
                                                     .then(messageChannel.createMessage("Kicked successfully the given user(s).")));
                         }
                         return Mono.empty();

@@ -26,7 +26,7 @@ public class ChangeAdminCommand implements CommandExecutable {
     }
 
     @Override
-    public Mono<Message> execute(@NotNull String[] cmd, String @NotNull [] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
+    public @NotNull Mono<Message> execute(@NotNull String[] cmd, String @NotNull [] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
         if(user instanceof Member){
             Member member = (Member)user;
 

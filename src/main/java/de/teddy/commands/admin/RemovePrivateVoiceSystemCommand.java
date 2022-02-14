@@ -5,9 +5,7 @@ import com.wetterquarz.command.CommandExecutable;
 import de.teddy.Handler;
 import discord4j.common.util.Snowflake;
 import discord4j.core.GatewayDiscordClient;
-import discord4j.core.object.entity.Member;
-import discord4j.core.object.entity.Message;
-import discord4j.core.object.entity.User;
+import discord4j.core.object.entity.*;
 import discord4j.core.object.entity.channel.MessageChannel;
 import discord4j.rest.util.Permission;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +15,9 @@ import reactor.core.publisher.Mono;
 
 public class RemovePrivateVoiceSystemCommand implements CommandExecutable {
     @Override
-    public Mono<Message> execute(@NotNull String[] strings, String[] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
-        if(user instanceof Member){
-            Member member = (Member)user;
+    public @NotNull Mono<Message> execute(@NotNull String[] strings, String[] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient) {
+        if (user instanceof Member) {
+            Member member = (Member) user;
 
             try{
                 long l = Long.parseLong(args[0]);

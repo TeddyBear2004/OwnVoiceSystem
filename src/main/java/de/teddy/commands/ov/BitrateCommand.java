@@ -17,22 +17,22 @@ import java.util.Optional;
 
 public class BitrateCommand implements CommandExecutable {
     @Override
-    public @NotNull Mono<Message> execute(@NotNull String[] strings, String[] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient){
-        if(user instanceof Member){
-            return ((Member)user).getVoiceState()
+    public @NotNull Mono<Message> execute(@NotNull String[] strings, String[] args, @NotNull User user, @Nullable Command command, @NotNull MessageChannel messageChannel, @NotNull GatewayDiscordClient gatewayDiscordClient) {
+        if (user instanceof Member) {
+            return ((Member) user).getVoiceState()
                     .flatMap(voiceState -> {
                         Optional<Snowflake> channelId = voiceState.getChannelId();
 
-                        if(channelId.isEmpty()
+                        if (channelId.isEmpty()
                                 || !HasPermission.hasPermissionToEdit(channelId.get().asLong(), user.getId().asLong()))
                             return Mono.empty();
                         int i;
                         try{
                             i = Integer.parseInt(args[0]);
 
-                            if(i < 7)
+                            if (i < 7)
                                 return messageChannel.createMessage("The value should be greater than or equal to 8kbs.");
-                            if(i > 97)
+                            if (i > 97)
                                 return messageChannel.createMessage("The value should be lower than or equal to 96kbs.");
                         }catch(ArrayIndexOutOfBoundsException e){
                             i = 64;
@@ -43,11 +43,11 @@ public class BitrateCommand implements CommandExecutable {
                         int finalI = i;
                         return voiceState.getChannel()
                                 .flatMap(voiceChannel ->
-                                        voiceChannel.edit(voiceChannelEditSpec -> voiceChannelEditSpec.setBitrate(finalI * 1000))
+                                        voiceChannel.edit()
+                                                .withBitrate(finalI * 1000)
                                                 .then(messageChannel.createMessage("Bitrate successfully updated from " + voiceChannel.getBitrate() + " to " + finalI + "kbs.")));
                     });
         }
-
         return Mono.empty();
     }
 }
